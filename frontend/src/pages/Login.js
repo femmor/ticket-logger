@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../features/auth/authSlice';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,12 @@ const Login = () => {
   });
 
   const { email, password } = formData;
+
+  const dispatch = useDispatch();
+
+  const { user, isSuccess, isError, isLoading, message } = useSelector(
+    state => state.auth
+  );
 
   // Form input change
   const onChange = e => {
@@ -22,6 +30,13 @@ const Login = () => {
     // Check if fields are not empty
     if (!email || !password) {
       toast.error('All fields are required');
+    } else {
+      const userData = {
+        email,
+        password,
+      };
+
+      dispatch(login(userData));
     }
   };
 
