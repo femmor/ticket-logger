@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
-const jwt = require('jsonwebtoken');
+const { generateToken } = require('../utils/generateToken');
 
 /**
  *
@@ -32,19 +32,19 @@ const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // Create user
-  const newUser = await User.create({
+  const user = await User.create({
     name,
     email,
     password: hashedPassword,
   });
 
-  if (newUser) {
+  if (user) {
     // Return user
     res.status(201).json({
-      _id: newUser._id,
-      name: newUser.name,
-      email: newUser.email,
-      token: generateToken(newUser._id),
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
     });
   } else {
     res.status(500);
@@ -70,7 +70,7 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      token: generateToken(newUser._id),
+      token: generateToken(user._id),
     });
   } else {
     res.status(401);
@@ -78,14 +78,30 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Generate token
-const generateToken = userId => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
+/**
+ *
+ * @desc Get current user
+ * @route /api/users/me
+ * @access Private
+ *
+ */
+
+const getMe = asyncHandler(async (req, res) => {
+  const user = {
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email,
+  };
+
+  res.status(200).json(user);
+});
+
+module.exports = {
+  generateToken,
 };
 
 module.exports = {
   registerUser,
   loginUser,
+  getMe,
 };
