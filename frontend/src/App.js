@@ -1,9 +1,21 @@
-function App() {
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Header } from './components';
+import { Home, Login, NotFound, Register } from './pages';
+
+const App = () => {
   return (
-    <div className="App">
-      <h1>Ticket Logger Application</h1>
-    </div>
+    <Router>
+      <div className="container">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
