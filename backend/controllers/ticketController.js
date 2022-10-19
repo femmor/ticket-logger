@@ -1,4 +1,6 @@
 const asyncHandler = require('express-async-handler');
+const Ticket = require('../models/ticketModel');
+const User = require('../models/userModel');
 
 /**
  *
@@ -9,9 +11,17 @@ const asyncHandler = require('express-async-handler');
  */
 
 const getTickets = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Get user's tickets",
-  });
+  // Get user with the id in JWT
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const tickets = await Ticket.find({ user });
+
+  res.status(200).json(tickets);
 });
 
 /**
