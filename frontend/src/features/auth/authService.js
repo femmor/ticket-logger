@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setLocalStorage } from '../../utils/localStorage';
+import { setLocalStorage, deleteLocalStorage } from '../../utils/localStorage';
 
 const API_URL = '/api/users';
 
@@ -13,8 +13,23 @@ const register = async userData => {
   return response.data;
 };
 
+// Login user
+const login = async userData => {
+  const response = await axios.post(`${API_URL}/login`, userData);
+
+  if (response.data) {
+    setLocalStorage('user', response.data);
+  }
+  return response.data;
+};
+
+// Logout User
+const logout = () => deleteLocalStorage('user');
+
 const authService = {
   register,
+  login,
+  logout,
 };
 
 export default authService;
