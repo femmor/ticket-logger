@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 /**
  *
  * @desc Get user tickets
- * @route /api/tickets
+ * @route GET /api/tickets
  * @access Private
  *
  */
@@ -27,7 +27,7 @@ const getTickets = asyncHandler(async (req, res) => {
 /**
  *
  * @desc Post ticket
- * @route /api/tickets
+ * @route POST /api/tickets
  * @access Private
  *
  */
@@ -63,7 +63,7 @@ const createTicket = asyncHandler(async (req, res) => {
 /**
  *
  * @desc Get single ticket
- * @route /api/tickets/:id
+ * @route GET /api/tickets/:id
  * @access Private
  *
  */
@@ -93,8 +93,91 @@ const getTicket = asyncHandler(async (req, res) => {
   res.status(200).json(ticket);
 });
 
+/**
+ *
+ * @desc Delete single ticket
+ * @route DELETE /api/tickets/:id
+ * @access Private
+ *
+ */
+
+const deleteTicket = asyncHandler(async (req, res) => {
+  // Get user with the id in JWT
+  const user = await User.findById(req.user.id);
+  const id = req.params.id;
+
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const ticket = await Ticket.findById(id);
+
+  if (!ticket) {
+    res.status(404);
+    throw new Error('Ticket not found');
+  }
+
+  if (ticket.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not Authorized!');
+  }
+
+  await ticket.remove();
+
+  res.status(200).json({
+    success: true,
+    message: 'Ticket deleted successfully',
+  });
+});
+
+/**
+ *
+ * @desc Update ticket
+ * @route PUT /api/tickets/:id
+ * @access Private
+ *
+ */
+
+const updateTicket = asyncHandler(async (req, res) => {
+  // Get user with the id in JWT
+  const user = await User.findById(req.user.id);
+  const id = req.params.id;
+
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const ticket = await Ticket.findById(id);
+
+  if (!ticket) {
+    res.status(404);
+    throw new Error('Ticket not found');
+  }
+
+  if (ticket.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not Authorized!');
+  }
+
+  const updatedTicket = await Ticket.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+
+  res.status(200).json({
+    updatedTicket,
+    success: true,
+    message: 'Ticket updated successfully',
+  });
+});
+
 module.exports = {
   getTickets,
   createTicket,
   getTicket,
+  deleteTicket,
+  updateTicket,
 };
