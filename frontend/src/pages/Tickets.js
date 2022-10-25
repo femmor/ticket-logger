@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getTickets, reset } from '../features/tickets/ticketSlice';
-import { Spinner } from '../components';
+import { Spinner, TicketItem } from '../components';
 import { BackButton } from '../components';
 
 const Tickets = () => {
@@ -28,10 +28,22 @@ const Tickets = () => {
   }
 
   return (
-    <div>
+    <>
       <BackButton url="/" />
       <h1>Tickets</h1>
-    </div>
+      <div className="tickets">
+        <div className="ticket-headings">
+          <div>Date</div>
+          <div>Product</div>
+          <div>Status</div>
+          <div></div>
+        </div>
+
+        {tickets.map(ticket => (
+          <TicketItem ticket={ticket} key={ticket._id} />
+        ))}
+      </div>
+    </>
   );
 };
 export default Tickets;

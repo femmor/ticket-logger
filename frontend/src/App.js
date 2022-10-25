@@ -1,6 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header, PrivateRoute } from './components';
-import { Home, Login, NewTicket, NotFound, Register, Tickets } from './pages';
+import {
+  Home,
+  Login,
+  NewTicket,
+  NotFound,
+  Register,
+  Ticket,
+  Tickets,
+} from './pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,6 +23,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/new-ticket" element={<PrivateRoute />}>
             <Route path="/new-ticket" element={<NewTicket />} />
+          </Route>
+          <Route path="/tickets/:id" element={<PrivateRoute />}>
+            <Route path="/tickets/:id" element={<Ticket />} />
           </Route>
           <Route path="/tickets" element={<PrivateRoute />}>
             <Route path="/tickets" element={<Tickets />} />

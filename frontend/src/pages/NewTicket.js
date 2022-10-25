@@ -9,7 +9,7 @@ import { BackButton } from '../components';
 const NewTicket = () => {
   const { user } = useSelector(state => state.auth);
   const { isLoading, isSuccess, isError, message } = useSelector(
-    state => state.ticket
+    state => state.tickets
   );
 
   const dispatch = useDispatch();
@@ -26,7 +26,6 @@ const NewTicket = () => {
     }
 
     if (isSuccess) {
-      toast.success(message);
       dispatch(reset());
       navigate('/tickets');
     }
