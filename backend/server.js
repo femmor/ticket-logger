@@ -7,6 +7,7 @@ const { errorHandler } = require('./middleware/errorMiddleware');
 
 const userRoute = require('./routes/userRoute');
 const ticketRoute = require('./routes/ticketRoute');
+const noteRoute = require('./routes/noteRoute');
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(
 // Routes
 app.use('/api/users', userRoute);
 app.use('/api/tickets', ticketRoute);
+app.use('/api/notes', noteRoute);
 
 // Error handling
 app.use(errorHandler);

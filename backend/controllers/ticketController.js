@@ -26,7 +26,7 @@ const getTickets = asyncHandler(async (req, res) => {
 
 /**
  *
- * @desc Post ticket
+ * @desc Create ticket
  * @route POST /api/tickets
  * @access Private
  *
