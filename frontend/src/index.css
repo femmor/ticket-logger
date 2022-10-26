@@ -329,7 +329,7 @@ h3 {
 }
 
 .btn-close:hover {
-  color: red;
+  filter: brightness(80%);
   transform: scale(0.98);
 }
 
